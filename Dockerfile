@@ -1,4 +1,4 @@
-FROM rocker/geospatial:3.6.2
+FROM rocker/geospatial:latest
 
 LABEL org.label-schema.license="GPL-2.0" \
       org.label-schema.vcs-url="https://github.com/rsettlag" \
