@@ -1,4 +1,4 @@
-FROM rocker/geospatial:latest
+FROM rocker/geospatial:3.6.2
 
 LABEL org.label-schema.license="GPL-2.0" \
       org.label-schema.vcs-url="https://github.com/rsettlag" \
@@ -11,7 +11,9 @@ RUN install2.r --error \
     --deps TRUE \
     SpatialEpi \
     INLABMA \
-    colorspace
+    colorspace \
+    ggmap \
+    RcolorBrewer
 
 RUN apt-get clean
 
