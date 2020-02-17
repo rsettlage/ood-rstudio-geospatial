@@ -12,7 +12,7 @@ RUN install2.r --error \
     --deps TRUE \
     INLABMA
 
-RUN tlmgr install url harvard enumerate amsmath float tabularx ctable multirow eurosym graphicx comment setspace enumitem \
+RUN tlmgr install url harvard enumerate amsmath float tabularx ctable multirow eurosym graphics comment setspace enumitem \
   && tlmgr path add \
   && Rscript -e "tinytex::r_texmf()"\
   && chown -R root:staff /opt/TinyTeX \
