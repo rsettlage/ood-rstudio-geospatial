@@ -5,15 +5,12 @@ LABEL org.label-schema.license="GPL-2.0" \
       maintainer="Robert Settlage <rsettlag@vt.edu>"
 ## helpful read: https://divingintogeneticsandgenomics.rbind.io/post/run-rstudio-server-with-singularity-on-hpc/
 
+RUN Rscript -e "install.packages(c('SpatialEpi', 'colorspace', 'ggmap', 'RcolorBrewer', 'Deriv, 'doParallel', 'fields', 'graph', 'HKprocess', 'MatrixModels', 'matrixStats', 'mvtnorm', 'numDeriv', 'orthopolynom', 'pixmap', 'Rgraphviz', 'sn'), dep=TRUE)"
 RUN Rscript -e "install.packages('INLA', repos='https://inla.r-inla-download.org/R/stable', dep=TRUE)"
 
 RUN install2.r --error \
     --deps TRUE \
-    SpatialEpi \
-    INLABMA \
-    colorspace \
-    ggmap \
-    RcolorBrewer
+    INLABMA
 
 RUN tlmgr install url harvard enumerate amsmath float tabularx ctable multirow eurosym graphicx comment setspace enumitem \
   && tlmgr path add \
