@@ -6,9 +6,7 @@ LABEL org.label-schema.license="GPL-2.0" \
 ## helpful read: https://divingintogeneticsandgenomics.rbind.io/post/run-rstudio-server-with-singularity-on-hpc/
 
 RUN Rscript -e "install.packages(c('BiocManager', 'SpatialEpi', 'colorspace', 'ggmap', 'Deriv', 'doParallel', 'fields', 'HKprocess', 'MatrixModels', 'matrixStats', 'mvtnorm', 'numDeriv', 'orthopolynom', 'pixmap', 'sn'), dep=TRUE)"
-RUN Rscript -e "BiocManager::install(c('RcolorBrewer', 'graph', 'Rgraphviz'))"
 RUN Rscript -e "install.packages('INLA', repos='https://inla.r-inla-download.org/R/stable', dep=TRUE)"
-
 RUN install2.r --error \
      --deps TRUE \
     INLABMA
