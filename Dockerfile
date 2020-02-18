@@ -12,9 +12,11 @@ RUN install2.r --error \
     --deps TRUE \
     INLABMA
 
-RUN tlmgr install url harvard enumerate amsmath float tabularx ctable multirow eurosym graphics comment setspace enumitem \
+RUN tlmgr install ae inconsolata listings metafont mfware parskip pdfcrop tex \
   && tlmgr path add \
-  && Rscript -e "tinytex::r_texmf()"\
+  && tlmgr install url harvard tools amsmath float ctable multirow eurosym graphics comment setspace enumitem \
+  && tlmgr path add \
+  && Rscript -e "tinytex::r_texmf()" \
   && chown -R root:staff /opt/TinyTeX \
   && chmod -R g+w /opt/TinyTeX \
   && chmod -R g+wx /opt/TinyTeX/bin
