@@ -12,9 +12,9 @@ ENV CTAN_REPO=${CTAN_REPO}
 RUN apt update \
   && apt-get install -y gzip curl wget
 
-RUN Rscript -e "install.packages('BiocManager');BiocManager::install(c('BiocStyle','FGN','graph','Rgraphviz','RColorBrewer'))" 
-RUN Rscript -e "install.packages(Ncpus=6,c('SpatialEpi', 'colorspace', 'ggmap', 'Deriv', 'doParallel', 'fields', 'HKprocess', 'MatrixModels', 'matrixStats', 'mvtnorm', 'numDeriv', 'orthopolynom', 'pixmap', 'sn'), dep=TRUE)"
-RUN Rscript -e "install.packages(Ncpus=6,'INLA', repos='https://inla.r-inla-download.org/R/stable', dep=TRUE); install.packages(Ncpus=6, 'INLABMA', dep=TRUE))"
+RUN Rscript -e ".libPaths('/usr/local/lib/R/site-library');BiocManager::install(c('BiocStyle','FGN','graph','Rgraphviz','RColorBrewer'))" 
+RUN Rscript -e "install.packages(Ncpus=6,lib='/usr/local/lib/R/site-library',c('SpatialEpi', 'colorspace', 'ggmap', 'Deriv', 'doParallel', 'fields', 'HKprocess', 'MatrixModels', 'matrixStats', 'mvtnorm', 'numDeriv', 'orthopolynom', 'pixmap', 'sn'), dep=TRUE)"
+RUN Rscript -e "install.packages(Ncpus=6,'INLA',lib='/usr/local/lib/R/site-library', repos='https://inla.r-inla-download.org/R/stable', dep=TRUE); install.packages(Ncpus=6, 'INLABMA', dep=TRUE)"
 
 ## see if this fixes tex errors -- from rocker verse dockerfile
 RUN install2.r --error tinytex \
