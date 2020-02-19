@@ -5,17 +5,41 @@ LABEL org.label-schema.license="GPL-2.0" \
       maintainer="Robert Settlage <rsettlag@vt.edu>"
 ## helpful read: https://divingintogeneticsandgenomics.rbind.io/post/run-rstudio-server-with-singularity-on-hpc/
 
-RUN Rscript -e "install.packages(c('BiocManager', 'SpatialEpi', 'colorspace', 'ggmap', 'Deriv', 'doParallel', 'fields', 'HKprocess', 'MatrixModels', 'matrixStats', 'mvtnorm', 'numDeriv', 'orthopolynom', 'pixmap', 'sn'), dep=TRUE)"
-RUN Rscript -e "install.packages('INLA', repos='https://inla.r-inla-download.org/R/stable', dep=TRUE)"
-RUN install2.r --error \
-     --deps TRUE \
-    INLABMA
+## from the rocker/verse, trying to fix the tex stuff
+ARG CTAN_REPO=${CTAN_REPO:-https://www.texlive.info/tlnet-archive/2019/02/27/tlnet}
+ENV CTAN_REPO=${CTAN_REPO}
 
-RUN tlmgr install ae inconsolata listings metafont mfware parskip pdfcrop tex \
-  url harvard tools amsmath float ctable multirow eurosym graphics comment setspace enumitem \
-  && tlmgr path add \
-  && Rscript -e "tinytex::r_texmf()" \
-  && chown -R root:staff /opt/TinyTeX \
+RUN apt update \
+  && apt-get install -y gzip curl wget
+
+RUN Rscript -e "install.packages('BiocManager');BiocManager::install(c('BiocStyle','FGN','graph','Rgraphviz','RColorBrewer'))" 
+RUN Rscript -e "install.packages(Ncpus=6,c('SpatialEpi', 'colorspace', 'ggmap', 'Deriv', 'doParallel', 'fields', 'HKprocess', 'MatrixModels', 'matrixStats', 'mvtnorm', 'numDeriv', 'orthopolynom', 'pixmap', 'sn'), dep=TRUE)"
+RUN Rscript -e "install.packages(Ncpus=6,'INLA', repos='https://inla.r-inla-download.org/R/stable', dep=TRUE); install.packages(Ncpus=6, 'INLABMA', dep=TRUE))"
+
+## see if this fixes tex errors -- from rocker verse dockerfile
+RUN install2.r --error tinytex \
+  ## Admin-based install of TinyTeX:
+  && wget -qO- \
+    "https://github.com/yihui/tinytex/raw/master/tools/install-unx.sh" | \
+    sh -s - --admin --no-path \
+  && tlmgr install ae inconsolata listings metafont parskip pdfcrop \
+     harvard ctable multirow eurosym comment setspace enumitem \
+  && mv ~/.TinyTeX /opt/TinyTeX \
+  && if /opt/TinyTeX/bin/*/tex -v | grep -q 'TeX Live 2018'; then \
+      ## Patch the Perl modules in the frozen TeX Live 2018 snapshot with the newer
+      ## version available for the installer in tlnet/tlpkg/TeXLive, to include the
+      ## fix described in https://github.com/yihui/tinytex/issues/77#issuecomment-466584510
+      ## as discussed in https://www.preining.info/blog/2019/09/tex-services-at-texlive-info/#comments
+      wget -P /tmp/ ${CTAN_REPO}/install-tl-unx.tar.gz \
+      && tar -xzf /tmp/install-tl-unx.tar.gz -C /tmp/ \
+      && cp -Tr /tmp/install-tl-*/tlpkg/TeXLive /opt/TinyTeX/tlpkg/TeXLive \
+      && rm -r /tmp/install-tl-*; \
+    fi \
+  && /opt/TinyTeX/bin/*/tlmgr path add
+
+## for some reason this line tosses an error, looks more like an info error, but Docker complains
+# RUN Rscript -e "tinytex::r_texmf()" \
+RUN chown -R root:staff /opt/TinyTeX \
   && chmod -R g+w /opt/TinyTeX \
   && chmod -R g+wx /opt/TinyTeX/bin
 
