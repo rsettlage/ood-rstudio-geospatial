@@ -47,7 +47,7 @@ RUN apt-get clean
 
 ## user needs Seurat with the geospatial stuff
 RUN wget https://repo.anaconda.com/miniconda/Miniconda2-latest-Linux-x86_64.sh \
-  && sh Miniconda2-latest-Linux-x86_64.sh \
+  && sh Miniconda2-latest-Linux-x86_64.sh -b \
   && install2.r --error Seurat
 
 RUN sed -i '/^R_LIBS_USER=/d' /usr/local/lib/R/etc/Renviron
