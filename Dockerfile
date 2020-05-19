@@ -8,9 +8,12 @@ LABEL org.label-schema.license="GPL-2.0" \
 ## from the rocker/verse, trying to fix the tex stuff
 ARG CTAN_REPO=${CTAN_REPO:-https://www.texlive.info/tlnet-archive/2019/02/27/tlnet}
 ENV CTAN_REPO=${CTAN_REPO}
+ENV PATH="${PATH}:/miniconda3/bin"
 
 RUN apt update \
   && apt-get install -y gzip curl wget
+RUN wget https://repo.anaconda.com/miniconda/Miniconda2-latest-Linux-x86_64.sh \
+  && sh Miniconda2-latest-Linux-x86_64.sh -p /miniconda3
 
 RUN Rscript -e ".libPaths('/usr/local/lib/R/site-library');BiocManager::install(c('BiocStyle','FGN','graph','Rgraphviz','RColorBrewer'))" 
 RUN Rscript -e "install.packages(Ncpus=6,lib='/usr/local/lib/R/site-library',c('SpatialEpi', 'colorspace', 'ggmap', 'Deriv', 'doParallel', 'fields', 'HKprocess', 'MatrixModels', 'tmap', 'matrixStats', 'mvtnorm', 'numDeriv', 'orthopolynom', 'pixmap', 'sn'), dep=TRUE)"
@@ -46,9 +49,7 @@ RUN chown -R root:staff /opt/TinyTeX \
 RUN apt-get clean
 
 ## user needs Seurat with the geospatial stuff
-RUN wget https://repo.anaconda.com/miniconda/Miniconda2-latest-Linux-x86_64.sh \
-  && sh Miniconda2-latest-Linux-x86_64.sh -b \
-  && install2.r --error Seurat \
+RUN install2.r --error Seurat \
   && install2.r --error hsdar
 
 RUN sed -i '/^R_LIBS_USER=/d' /usr/local/lib/R/etc/Renviron
