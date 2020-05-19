@@ -13,7 +13,7 @@ ENV PATH="${PATH}:/miniconda3/bin"
 RUN apt update \
   && apt-get install -y gzip curl wget
 RUN wget https://repo.anaconda.com/miniconda/Miniconda2-latest-Linux-x86_64.sh \
-  && sh Miniconda2-latest-Linux-x86_64.sh -p /miniconda3
+  && sh Miniconda2-latest-Linux-x86_64.sh -b -p /miniconda3
 
 RUN Rscript -e ".libPaths('/usr/local/lib/R/site-library');BiocManager::install(c('BiocStyle','FGN','graph','Rgraphviz','RColorBrewer'))" 
 RUN Rscript -e "install.packages(Ncpus=6,lib='/usr/local/lib/R/site-library',c('SpatialEpi', 'colorspace', 'ggmap', 'Deriv', 'doParallel', 'fields', 'HKprocess', 'MatrixModels', 'tmap', 'matrixStats', 'mvtnorm', 'numDeriv', 'orthopolynom', 'pixmap', 'sn'), dep=TRUE)"
