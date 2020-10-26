@@ -50,7 +50,7 @@ RUN Rscript -e "library(reticulate); install_miniconda(path='/miniconda3',update
 RUN install2.r --error Seurat \
   && install2.r --error hsdar \
   && install2.r --error lidR \
-  && install2.r --error elevtar
+  && Rscript -e "library(devtools); install_github('jhollist/elevatr')"
 
 RUN sed -i '/^R_LIBS_USER=/d' /usr/local/lib/R/etc/Renviron
 RUN echo 'R_ENVIRON=~/.Renviron.OOD \
