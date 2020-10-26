@@ -48,7 +48,9 @@ RUN apt-get clean
 ## user needs Seurat with the geospatial stuff
 RUN Rscript -e "library(reticulate); install_miniconda(path='/miniconda3',update=TRUE,force=TRUE)"
 RUN install2.r --error Seurat \
-  && install2.r --error hsdar
+  && install2.r --error hsdar \
+  && install2.r --error lidR \
+  && install2.r --error elevtar
 
 RUN sed -i '/^R_LIBS_USER=/d' /usr/local/lib/R/etc/Renviron
 RUN echo 'R_ENVIRON=~/.Renviron.OOD \
