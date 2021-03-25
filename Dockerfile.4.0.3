@@ -10,7 +10,7 @@ ARG CTAN_REPO=${CTAN_REPO:-https://www.texlive.info/tlnet-archive/2019/02/27/tln
 ENV CTAN_REPO=${CTAN_REPO}
 
 RUN apt update \
-  && apt-get install -y gzip curl wget jags
+  && apt-get install -y gzip curl wget subversion jags
 
 RUN Rscript -e ".libPaths('/usr/local/lib/R/site-library');BiocManager::install(c('BiocStyle','graph','Rgraphviz','RColorBrewer'))" 
 RUN Rscript -e "install.packages(Ncpus=6,lib='/usr/local/lib/R/site-library',c('rjags','fgm', 'hsdar', 'reticulate', 'SpatialEpi', 'colorspace', 'ggmap', 'Deriv', 'doParallel', 'fields', 'HKprocess', 'MatrixModels', 'tmap', 'matrixStats', 'mvtnorm', 'numDeriv', 'orthopolynom', 'pixmap', 'sn'), dep=TRUE)"
