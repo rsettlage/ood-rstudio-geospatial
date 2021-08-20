@@ -6,6 +6,8 @@ LABEL org.label-schema.license="GPL-2.0" \
 ## helpful read: https://divingintogeneticsandgenomics.rbind.io/post/run-rstudio-server-with-singularity-on-hpc/
 
 RUN apt update && apt-get install -y libmpfr-dev
+RUN /rocker_scripts/install_tidyverse.sh
+RUN /rocker_scripts/install_verse.sh
 RUN /rocker_scripts/install_geospatial.sh
 RUN install2.r --error Rmpfr
 
