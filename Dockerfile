@@ -7,7 +7,7 @@ LABEL org.label-schema.license="GPL-2.0" \
 
 RUN apt update && apt-get install -y libmpfr-dev
 RUN echo "local({r <- getOption('repos')" >> /usr/lib/R/library/base/R/Rprofile
-RUN echo "r['CRAN'] <- 'http://cran.r-project.org' >> /usr/lib/R/library/base/R/Rprofile
+RUN echo "r['CRAN'] <- 'http://cran.r-project.org'" >> /usr/lib/R/library/base/R/Rprofile
 RUN echo "options(repos=r)}) >> /usr/lib/R/library/base/R/Rprofile
 
 
