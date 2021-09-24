@@ -8,6 +8,7 @@ LABEL org.label-schema.license="GPL-2.0" \
 RUN apt update && apt-get install -y libmpfr-dev
 
 RUN sed -i "s_install2.r_install2.r --repos='http://cran.r-project.org'_" /rocker_scripts/install_geospatial.sh
+RUN Rscript -e "install.packages('remotes'); remotes::install_github('r-spatial/mapview')"
 RUN /rocker_scripts/install_tidyverse.sh
 RUN /rocker_scripts/install_verse.sh
 RUN /rocker_scripts/install_geospatial.sh
