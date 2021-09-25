@@ -16,4 +16,4 @@ RUN /rocker_scripts/install_geospatial.sh
 RUN install2.r --error Rmpfr
 
 RUN apt-get clean
-
+RUN rm /usr/local/lib/R/etc/Rprofile.site
